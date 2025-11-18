@@ -1,0 +1,114 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block content %}
+<div class="container mt-5 mb-5">
+  <div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8 shadow-lg p-5 rounded">
+      <h2 class="text-center mb-4">Confirm Package Booking</h2>
+      
+      <!-- Flight Details -->
+      <div class="card mb-3">
+        <div class="card-header bg-primary text-white">
+          <h4>Flight Details</h4>
+        </div>
+        <div class="card-body">
+          {% if flight %}
+          <p><strong>Flight Number:</strong> {{ flight.flight_num }}</p>
+          <p><strong>Company:</strong> {{ flight.company }}</p>
+          <p><strong>From:</strong> {{ flight.source }}</p>
+          <p><strong>To:</strong> {{ flight.destination }}</p>
+          <p><strong>Departure Time:</strong> {{ flight.dept_time }}</p>
+          <p><strong>Arrival Time:</strong> {{ flight.dest_time }}</p>
+          <p><strong>Seats:</strong> {{ seat }}</p>
+          <p><strong>Flight Price:</strong> ₹{{ flight_price }}</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Hotel Details -->
+      <div class="card mb-3">
+        <div class="card-header bg-success text-white">
+          <h4>Hotel Details</h4>
+        </div>
+        <div class="card-body">
+          {% if hotel %}
+          <p><strong>Hotel Name:</strong> {{ hotel.hotel_name }}</p>
+          <p><strong>Address:</strong> {{ hotel.hotel_address }}</p>
+          <p><strong>Rating:</strong> 
+            {% for _ in ''|center:hotel.hotel_rating %} ★ {% endfor %}
+          </p>
+          <p><strong>Amenities:</strong> {{ hotel.amenities }}</p>
+          <p><strong>Distance from Airport:</strong> {{ hotel.distfromap }} KM</p>
+          <p><strong>Rooms:</strong> {{ room }}</p>
+          <p><strong>Hotel Price:</strong> ₹{{ hotel_price }}</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Package Summary -->
+      <div class="card mb-4 bg-light">
+        <div class="card-body">
+          <p><strong>Travel Date:</strong> {{ date }}</p>
+          <h4 class="text-right"><strong>Total Price: ₹{{ total_price }}</strong></h4>
+        </div>
+      </div>
+
+      <!-- Passenger Details Form -->
+      <div class="card">
+        <div class="card-header bg-info text-white">
+          <h4>Passenger Details</h4>
+        </div>
+        <div class="card-body">
+          <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+              <label>{{ form.passenger_name.label }}</label>
+              {{ form.passenger_name }}
+              {% if form.passenger_name.errors %}
+                <div class="text-danger">{{ form.passenger_name.errors }}</div>
+              {% endif %}
+            </div>
+            <div class="form-group">
+              <label>{{ form.passenger_email.label }}</label>
+              {{ form.passenger_email }}
+              {% if form.passenger_email.errors %}
+                <div class="text-danger">{{ form.passenger_email.errors }}</div>
+              {% endif %}
+            </div>
+            <div class="form-group">
+              <label>{{ form.passenger_phone.label }}</label>
+              {{ form.passenger_phone }}
+              {% if form.passenger_phone.errors %}
+                <div class="text-danger">{{ form.passenger_phone.errors }}</div>
+              {% endif %}
+            </div>
+            <div class="form-group">
+              <label>{{ form.passenger_address.label }}</label>
+              {{ form.passenger_address }}
+              {% if form.passenger_address.errors %}
+                <div class="text-danger">{{ form.passenger_address.errors }}</div>
+              {% endif %}
+            </div>
+            <div class="form-group">
+              <label>{{ form.passenger_id_number.label }}</label>
+              {{ form.passenger_id_number }}
+              {% if form.passenger_id_number.errors %}
+                <div class="text-danger">{{ form.passenger_id_number.errors }}</div>
+              {% endif %}
+            </div>
+            <div class="text-center mt-4">
+              <button type="submit" class="btn btn-success btn-lg">Confirm Package Booking</button>
+              <a href="{% url 'package' %}" class="btn btn-secondary btn-lg ml-2">Cancel</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2"></div>
+  </div>
+</div>
+{% endblock %}
+
+
+

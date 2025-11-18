@@ -1,0 +1,172 @@
+{% extends 'index.html' %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>My Booking - Travel Trip</title>
+  </head>
+  <body>
+
+{% block content %}
+<center>
+  <div class="dashboard-nav mb-3" style="position: fixed; top: 80px; right: 20px; z-index: 1000;">
+    <a href="#flights-section" class="btn btn-sm btn-primary m-1">Flights</a>
+    <a href="#hotels-section" class="btn btn-sm btn-primary m-1">Hotels</a>
+    <a href="#packages-section" class="btn btn-sm btn-primary m-1">Packages</a>
+  </div>
+  <div class="flights-d" id="flights-section">
+    <br><br>
+<br><br>
+    <h1 class="display-4 mb-4" style="color: #333; font-weight: bold;">MY BOOKING</h1>
+    <h2>Flights</h2><br><br>
+    <table class=" shadow-lg rounded">
+      <tr>
+      <th class="p-3 hg">Flight Number</th>
+        <th class="p-3 hg">Date</th>
+        <th class="p-3 hg">Seats</th>
+        <th class="p-3 hg">Actions</th>
+      </tr>
+
+    {% if flights %}
+      {% for i in flights %}
+      <tr>
+      <td class="p-3 gd bg-light"><p>{{ i.flight }}</p></td>
+      <td class="p-3 gd bg-light"><p>{{ i.date }}</p></td>
+      <td class="p-3 gd bg-light" ><p>{{ i.seat }}</p></td>
+      <td class="p-3 gd bg-light">
+        <a class="btn btn-success btn-sm mb-1" href="{% url 'ViewFlightDetails' i.id %}">VIEW</a>
+        {% if i.seat > 1 %}
+        <a class="btn btn-info btn-sm mb-1" href="{% url 'ManagePassengers' 'flight' i.id %}">PASSENGERS</a>
+        {% endif %}
+        <a class="btn btn-danger btn-sm" href="/cancelflight/{{ i.flight }}/{{ i.date }}/{{ i.seat }}">CANCEL</a>
+      </td>
+      </tr>
+      {% endfor %}
+    {% else %}
+      <tr>
+        <td colspan="4" class="p-3 text-center bg-light">
+          <p>No flight bookings found. <a href="{% url 'flights' %}">Book a flight now!</a></p>
+        </td>
+      </tr>
+    {% endif %}
+    </table>
+    <br><br>
+    <a href="{% url 'flights' %}" class="btn btn-primary">BOOK FLIGHTS</a>
+    <br><br>
+  </div>
+
+
+  <div class="hotels-d" id="hotels-section">
+    <br><br><br><br>
+    <h2>Hotels</h2><br><br>
+    <table class=" shadow-lg rounded">
+      <tr>
+      <th class="p-3 hg1">Hotel Name</th>
+        <th class="p-3 hg1">Date</th>
+        <th class="p-3 hg1">Rooms</th>
+        <th class="p-3 hg1">Actions</th>
+      </tr>
+    {% if hotels %}
+      {% for j in hotels %}
+      <tr>
+        <td class="p-3 gd bg-light"><p>{{ j.hotel_name }}</p></td>
+        <td class="p-3 gd bg-light"><p>{{ j.date }}</p></td>
+        <td class="p-3 gd bg-light"><p>{{ j.room }}</p></td>
+        <td class="p-3 gd bg-light">
+          <a class="btn btn-success btn-sm mb-1" href="{% url 'ViewHotelDetails' j.id %}">VIEW</a>
+          {% if j.room > 1 %}
+          <a class="btn btn-info btn-sm mb-1" href="{% url 'ManagePassengers' 'hotel' j.id %}">GUESTS</a>
+          {% endif %}
+          <a class="btn btn-danger btn-sm" href="/cancelhotel/{{ j.hotel_name }}/{{ j.date }}/{{ j.room }}">CANCEL</a>
+        </td>
+      </tr>
+      {% endfor %}
+    {% else %}
+      <tr>
+        <td colspan="4" class="p-3 text-center bg-light">
+          <p>No hotel bookings found. <a href="{% url 'hotels' %}">Book a hotel now!</a></p>
+        </td>
+      </tr>
+    {% endif %}
+    </table><br><br>
+    <a href="{% url 'hotels' %}" class="btn btn-primary">BOOK HOTEL</a>
+    <br><br>
+
+  </div>
+  <div class="package-d" id="packages-section"><br><br><br><br>
+    <h2>Packages</h2><br><br>
+    <table class=" shadow-lg rounded">
+      <tr>
+      <th class="p-3 hg2">Flight Number</th>
+      <th class="p-3 hg2">Seats</th>
+      <th class="p-3 hg2">Hotel Name</th>
+        <th class="p-3 hg2">Rooms</th>
+        <th class="p-3 hg2">Date</th>
+        <th class="p-3 hg2">Actions</th>
+      </tr>
+    {% if packages %}
+      {% for k in packages %}
+      <tr>
+      <td class="p-3 gd bg-light"><p>{{ k.flight }}</p></td>
+      <td class="p-3 gd bg-light"><p>{{ k.seat }}</p></td>
+      <td class="p-3 gd bg-light"><p>{{ k.hotel_name }}</p></td>
+      <td class="p-3 gd bg-light"><p>{{ k.room }}</p></td>
+      <td class="p-3 gd bg-light bg-light"><p>{{ k.date }}</p></td>
+      <td class="p-3 gd bg-light">
+        <a class="btn btn-success btn-sm mb-1" href="{% url 'ViewPackageDetails' k.id %}">VIEW</a>
+        {% if k.seat > 1 or k.room > 1 %}
+        <a class="btn btn-info btn-sm mb-1" href="{% url 'ManagePassengers' 'package' k.id %}">PASSENGERS</a>
+        {% endif %}
+        <a class="btn btn-danger btn-sm" href="/cancelpackage/{{ k.flight }}/{{ k.seat }}/{{ k.hotel_name }}/{{ k.date }}/{{ k.room }}">CANCEL</a>
+      </td>
+      </tr>
+      {% endfor %}
+    {% else %}
+      <tr>
+        <td colspan="6" class="p-3 text-center bg-light">
+          <p>No package bookings found. <a href="{% url 'package' %}">Book a package now!</a></p>
+        </td>
+      </tr>
+    {% endif %}
+    </table><br><br>
+    <a href="{% url 'package' %}" class="btn btn-primary">BOOK PACKAGE</a>
+    <br><br>
+
+  </div>
+
+<style>
+  .btn{
+    margin-left: 0;
+  }
+.hg{
+  background: #1eb2a6;
+  margin-bottom: 2px;
+}
+.gd{
+  border-bottom: 1px solid black;
+}
+.hg1{
+  background: #f57b51;
+  margin-bottom: 2px;
+}
+.hg2{
+  background: #fdd365;
+  margin-bottom: 2px;
+}
+.flights-d{
+  height: 100vh;
+  background: linear-gradient(to left,#ede59a,#d5c455,#fddb3a);
+}
+.hotels-d{
+  height: 100vh;
+  background: linear-gradient(to left,#fea5ad,#ea9abb,#be8abf);
+}
+.package-d{
+  background: linear-gradient(to left,#550a46,#f9f6f7,#9aceff);
+  height: 100vh;
+}
+</style>
+{% endblock %}
+
+  </body>
+</html>

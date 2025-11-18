@@ -1,0 +1,99 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block content %}
+<div class="container mt-5 mb-5">
+  <div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+      <h2 class="text-center mb-4">Manage Passengers</h2>
+      
+      <!-- Booking Summary -->
+      <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+          <h4>Booking Summary</h4>
+        </div>
+        <div class="card-body">
+          {% if booking_type == 'flight' %}
+            <p><strong>Flight:</strong> {{ booking.flight }}</p>
+            <p><strong>Date:</strong> {{ booking.date }}</p>
+            <p><strong>Number of Seats:</strong> {{ num_passengers }}</p>
+            {% if flight %}
+            <p><strong>From:</strong> {{ flight.source }} <strong>To:</strong> {{ flight.destination }}</p>
+            {% endif %}
+          {% elif booking_type == 'hotel' %}
+            <p><strong>Hotel:</strong> {{ booking.hotel_name }}</p>
+            <p><strong>Check-in Date:</strong> {{ booking.date }}</p>
+            <p><strong>Number of Rooms:</strong> {{ num_passengers }}</p>
+            {% if hotel %}
+            <p><strong>Address:</strong> {{ hotel.hotel_address }}</p>
+            {% endif %}
+          {% elif booking_type == 'package' %}
+            <p><strong>Flight:</strong> {{ booking.flight }}</p>
+            <p><strong>Hotel:</strong> {{ booking.hotel_name }}</p>
+            <p><strong>Travel Date:</strong> {{ booking.date }}</p>
+            <p><strong>Seats:</strong> {{ booking.seat }} | <strong>Rooms:</strong> {{ booking.room }}</p>
+            <p><strong>Total Passengers to Register:</strong> {{ num_passengers }}</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Passenger Details Form -->
+      <div class="card">
+        <div class="card-header bg-info text-white">
+          <h4>Passenger Details</h4>
+          <small>Please fill details for each passenger/guest</small>
+        </div>
+        <div class="card-body">
+          <form method="POST">
+            {% csrf_token %}
+            {% for passenger in passengers_data %}
+            <div class="border rounded p-4 mb-4" style="background-color: #f8f9fa;">
+              <h5 class="mb-3">{% if booking_type == 'hotel' %}Guest{% else %}Passenger{% endif %} {{ passenger.number }}</h5>
+              
+              <div class="form-group">
+                <label>Full Name <span class="text-danger">*</span></label>
+                <input type="text" name="passenger_name_{{ passenger.number }}" class="form-control" 
+                       value="{{ passenger.name }}" required placeholder="Enter full name">
+              </div>
+
+              <div class="form-group">
+                <label>Email Address <span class="text-danger">*</span></label>
+                <input type="email" name="passenger_email_{{ passenger.number }}" class="form-control" 
+                       value="{{ passenger.email }}" required placeholder="Enter email address">
+              </div>
+
+              <div class="form-group">
+                <label>Phone Number <span class="text-danger">*</span></label>
+                <input type="text" name="passenger_phone_{{ passenger.number }}" class="form-control" 
+                       value="{{ passenger.phone }}" required placeholder="Enter phone number">
+              </div>
+
+              <div class="form-group">
+                <label>Address <span class="text-danger">*</span></label>
+                <textarea name="passenger_address_{{ passenger.number }}" class="form-control" rows="3" 
+                          required placeholder="Enter address">{{ passenger.address }}</textarea>
+              </div>
+
+              <div class="form-group">
+                <label>ID/Passport Number (Optional)</label>
+                <input type="text" name="passenger_id_number_{{ passenger.number }}" class="form-control" 
+                       value="{{ passenger.id_number }}" placeholder="Enter ID or Passport number">
+              </div>
+            </div>
+            {% endfor %}
+
+            <div class="text-center mt-4">
+              <button type="submit" class="btn btn-success btn-lg">Save Passenger Details</button>
+              <a href="{% url 'dashboard' %}" class="btn btn-secondary btn-lg ml-2">Cancel</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2"></div>
+  </div>
+</div>
+{% endblock %}
+
+
+

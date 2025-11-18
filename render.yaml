@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: tour-and-travel-app
+    runtime: python3
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn tourAndTravel.wsgi:application"
+    envVars:
+      - key: DEBUG
+        value: False
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALLOWED_HOSTS
+        fromSecret: allowed-hosts
+    databases:
+      - name: tour-db
+        databaseName: tourdb
+        user: touruser

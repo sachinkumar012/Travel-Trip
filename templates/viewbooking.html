@@ -1,0 +1,247 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block content %}
+<div class="container mt-5 mb-5">
+  <div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+      <h2 class="text-center mb-4">Booking Details</h2>
+      
+      {% if booking_type == 'flight' %}
+        <!-- Flight Booking Details -->
+        <div class="card mb-3">
+          <div class="card-header bg-primary text-white">
+            <h4>Flight Information</h4>
+          </div>
+          <div class="card-body">
+            {% if flight %}
+            <p><strong>Flight Number:</strong> {{ flight.flight_num }}</p>
+            <p><strong>Company:</strong> {{ flight.company }}</p>
+            <p><strong>From:</strong> {{ flight.source }}</p>
+            <p><strong>To:</strong> {{ flight.destination }}</p>
+            <p><strong>Departure Time:</strong> {{ flight.dept_time }}</p>
+            <p><strong>Arrival Time:</strong> {{ flight.dest_time }}</p>
+            <p><strong>Travel Date:</strong> {{ booking.date }}</p>
+            <p><strong>Number of Seats:</strong> {{ booking.seat }}</p>
+            <p><strong>Price per Seat:</strong> ₹{{ flight.eprice }}</p>
+            <p><strong>Total Price:</strong> ₹{% widthratio flight.eprice 1 booking.seat %}</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Primary Passenger Details -->
+        <div class="card mb-3">
+          <div class="card-header bg-info text-white">
+            <h4>Primary Passenger Details</h4>
+          </div>
+          <div class="card-body">
+            {% if booking.passenger_name %}
+            <p><strong>Name:</strong> {{ booking.passenger_name }}</p>
+            <p><strong>Email:</strong> {{ booking.passenger_email }}</p>
+            <p><strong>Phone:</strong> {{ booking.passenger_phone }}</p>
+            <p><strong>Address:</strong> {{ booking.passenger_address }}</p>
+            {% if booking.passenger_id_number %}
+            <p><strong>ID/Passport:</strong> {{ booking.passenger_id_number }}</p>
+            {% endif %}
+            {% else %}
+            <p class="text-muted">No passenger details provided</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Additional Passengers -->
+        {% if passengers %}
+        <div class="card mb-3">
+          <div class="card-header bg-success text-white">
+            <h4>Additional Passengers ({{ passengers.count }})</h4>
+          </div>
+          <div class="card-body">
+            {% for passenger in passengers %}
+            <div class="border-bottom mb-3 pb-3">
+              <h5>Passenger {{ passenger.passenger_number }}</h5>
+              <p><strong>Name:</strong> {{ passenger.passenger_name }}</p>
+              <p><strong>Email:</strong> {{ passenger.passenger_email }}</p>
+              <p><strong>Phone:</strong> {{ passenger.passenger_phone }}</p>
+              <p><strong>Address:</strong> {{ passenger.passenger_address }}</p>
+              {% if passenger.passenger_id_number %}
+              <p><strong>ID/Passport:</strong> {{ passenger.passenger_id_number }}</p>
+              {% endif %}
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+
+      {% elif booking_type == 'hotel' %}
+        <!-- Hotel Booking Details -->
+        <div class="card mb-3">
+          <div class="card-header bg-primary text-white">
+            <h4>Hotel Information</h4>
+          </div>
+          <div class="card-body">
+            {% if hotel %}
+            <p><strong>Hotel Name:</strong> {{ hotel.hotel_name }}</p>
+            <p><strong>Address:</strong> {{ hotel.hotel_address }}</p>
+            <p><strong>Rating:</strong> 
+              {% for _ in ''|center:hotel.hotel_rating %} ★ {% endfor %}
+            </p>
+            <p><strong>Amenities:</strong> {{ hotel.amenities }}</p>
+            <p><strong>Distance from Airport:</strong> {{ hotel.distfromap }} KM</p>
+            <p><strong>Check-in Date:</strong> {{ booking.date }}</p>
+            <p><strong>Number of Rooms:</strong> {{ booking.room }}</p>
+            <p><strong>Price per Room:</strong> ₹{{ hotel.hotel_price }}</p>
+            <p><strong>Total Price:</strong> ₹{% widthratio hotel.hotel_price 1 booking.room %}</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Primary Guest Details -->
+        <div class="card mb-3">
+          <div class="card-header bg-info text-white">
+            <h4>Primary Guest Details</h4>
+          </div>
+          <div class="card-body">
+            {% if booking.guest_name %}
+            <p><strong>Name:</strong> {{ booking.guest_name }}</p>
+            <p><strong>Email:</strong> {{ booking.guest_email }}</p>
+            <p><strong>Phone:</strong> {{ booking.guest_phone }}</p>
+            <p><strong>Address:</strong> {{ booking.guest_address }}</p>
+            {% if booking.guest_id_number %}
+            <p><strong>ID/Passport:</strong> {{ booking.guest_id_number }}</p>
+            {% endif %}
+            {% else %}
+            <p class="text-muted">No guest details provided</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Additional Guests -->
+        {% if passengers %}
+        <div class="card mb-3">
+          <div class="card-header bg-success text-white">
+            <h4>Additional Guests ({{ passengers.count }})</h4>
+          </div>
+          <div class="card-body">
+            {% for passenger in passengers %}
+            <div class="border-bottom mb-3 pb-3">
+              <h5>Guest {{ passenger.passenger_number }}</h5>
+              <p><strong>Name:</strong> {{ passenger.passenger_name }}</p>
+              <p><strong>Email:</strong> {{ passenger.passenger_email }}</p>
+              <p><strong>Phone:</strong> {{ passenger.passenger_phone }}</p>
+              <p><strong>Address:</strong> {{ passenger.passenger_address }}</p>
+              {% if passenger.passenger_id_number %}
+              <p><strong>ID/Passport:</strong> {{ passenger.passenger_id_number }}</p>
+              {% endif %}
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+
+      {% elif booking_type == 'package' %}
+        <!-- Package Booking Details -->
+        <div class="card mb-3">
+          <div class="card-header bg-primary text-white">
+            <h4>Flight Information</h4>
+          </div>
+          <div class="card-body">
+            {% if flight %}
+            <p><strong>Flight Number:</strong> {{ flight.flight_num }}</p>
+            <p><strong>Company:</strong> {{ flight.company }}</p>
+            <p><strong>From:</strong> {{ flight.source }}</p>
+            <p><strong>To:</strong> {{ flight.destination }}</p>
+            <p><strong>Departure Time:</strong> {{ flight.dept_time }}</p>
+            <p><strong>Arrival Time:</strong> {{ flight.dest_time }}</p>
+            <p><strong>Seats:</strong> {{ booking.seat }}</p>
+            <p><strong>Flight Price:</strong> ₹{% widthratio flight.eprice 1 booking.seat %}</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="card mb-3">
+          <div class="card-header bg-success text-white">
+            <h4>Hotel Information</h4>
+          </div>
+          <div class="card-body">
+            {% if hotel %}
+            <p><strong>Hotel Name:</strong> {{ hotel.hotel_name }}</p>
+            <p><strong>Address:</strong> {{ hotel.hotel_address }}</p>
+            <p><strong>Rating:</strong> 
+              {% for _ in ''|center:hotel.hotel_rating %} ★ {% endfor %}
+            </p>
+            <p><strong>Amenities:</strong> {{ hotel.amenities }}</p>
+            <p><strong>Distance from Airport:</strong> {{ hotel.distfromap }} KM</p>
+            <p><strong>Rooms:</strong> {{ booking.room }}</p>
+            <p><strong>Hotel Price:</strong> ₹{% widthratio hotel.hotel_price 1 booking.room %}</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="card mb-3 bg-light">
+          <div class="card-body">
+            <p><strong>Travel Date:</strong> {{ booking.date }}</p>
+            <h4 class="text-right"><strong>Total Package Price: ₹{{ total_price }}</strong></h4>
+          </div>
+        </div>
+
+        <!-- Primary Passenger Details -->
+        <div class="card mb-3">
+          <div class="card-header bg-info text-white">
+            <h4>Primary Passenger Details</h4>
+          </div>
+          <div class="card-body">
+            {% if booking.passenger_name %}
+            <p><strong>Name:</strong> {{ booking.passenger_name }}</p>
+            <p><strong>Email:</strong> {{ booking.passenger_email }}</p>
+            <p><strong>Phone:</strong> {{ booking.passenger_phone }}</p>
+            <p><strong>Address:</strong> {{ booking.passenger_address }}</p>
+            {% if booking.passenger_id_number %}
+            <p><strong>ID/Passport:</strong> {{ booking.passenger_id_number }}</p>
+            {% endif %}
+            {% else %}
+            <p class="text-muted">No passenger details provided</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Additional Passengers -->
+        {% if passengers %}
+        <div class="card mb-3">
+          <div class="card-header bg-warning text-white">
+            <h4>Additional Passengers ({{ passengers.count }})</h4>
+          </div>
+          <div class="card-body">
+            {% for passenger in passengers %}
+            <div class="border-bottom mb-3 pb-3">
+              <h5>Passenger {{ passenger.passenger_number }}</h5>
+              <p><strong>Name:</strong> {{ passenger.passenger_name }}</p>
+              <p><strong>Email:</strong> {{ passenger.passenger_email }}</p>
+              <p><strong>Phone:</strong> {{ passenger.passenger_phone }}</p>
+              <p><strong>Address:</strong> {{ passenger.passenger_address }}</p>
+              {% if passenger.passenger_id_number %}
+              <p><strong>ID/Passport:</strong> {{ passenger.passenger_id_number }}</p>
+              {% endif %}
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+
+      {% endif %}
+
+      <div class="text-center mt-4">
+        <a href="{% url 'dashboard' %}" class="btn btn-primary">Back to My Booking</a>
+        {% if booking_type == 'flight' and booking.seat > 1 %}
+        <a href="{% url 'ManagePassengers' 'flight' booking.id %}" class="btn btn-info ml-2">Manage Passengers</a>
+        {% elif booking_type == 'hotel' and booking.room > 1 %}
+        <a href="{% url 'ManagePassengers' 'hotel' booking.id %}" class="btn btn-info ml-2">Manage Guests</a>
+        {% elif booking_type == 'package' and booking.seat > 1 or booking.room > 1 %}
+        <a href="{% url 'ManagePassengers' 'package' booking.id %}" class="btn btn-info ml-2">Manage Passengers</a>
+        {% endif %}
+      </div>
+    </div>
+    <div class="col-md-2"></div>
+  </div>
+</div>
+{% endblock %}
+
