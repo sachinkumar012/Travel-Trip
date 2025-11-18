@@ -37,7 +37,19 @@ SECRET_KEY = 'axx97&6%uwp!(*fg$q8s*%5honv!4i7#ce8o4#+m)e$9h)!#x0'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS
+allowed_hosts_env = os.environ.get('ALLOWED_HOSTS', '')
+if allowed_hosts_env:
+    ALLOWED_HOSTS = [host.strip() for host in allowed_hosts_env.split(',')]
+else:
+    render_external_url = os.environ.get('RENDER_EXTERNAL_URL', '')
+    if render_external_url:
+        from urllib.parse import urlparse
+        parsed = urlparse(render_external_url)
+        ALLOWED_HOSTS = [parsed.netloc]
+    else:
+        # Default for development
+        ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
